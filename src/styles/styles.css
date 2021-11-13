@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&display=swap');
+
+*{
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    background-image: linear-gradient( rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85) ), url(../img/background.jpg);
+    background-color: black;
+    color: white;
+}
+
+.nav-ul{
+    position: sticky;
+    z-index: 1000;
+    font-family: 'Inter';
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    font-size: larger;
+}
+
+li{
+    float: left;
+}
+
+.menu{
+    float:right;
+}
+
+li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active){
+    background-color: #111;
+}
+
+.active{
+    background-color: darkolivegreen;
+}
+
+.navigation-wrapper{
+    display: flex;
+}
+
+h1{
+    color: white;
+    margin-bottom: 0.5em;
+    font-family: 'Poppins';
+    font-weight: bolder;
+    font-size: 5em;
+    color: white;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+footer{
+    color: white;
+    background-color: darkgreen;
+    font-family: "Inter", sans-serif;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px
+}
+
+input{
+    font-size: large;
+}
+
+button{
+    text-align: center;
+    font-size: large;
+}
+
+.search-box{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    margin:auto;
+    left: 50%;
+    top: 20%;
+    width: fit-content;
+    transform: translate(-50%);
+}
+
+h2{
+    font-size: xx-large;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 250px;
+  }
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    font-size: large;
+  }
+  
+tr:nth-child(even) {
+    background-color: darkslategrey;
+  }
+
+tr:nth-child(odd) {
+    background-color: black;
+  }
+
+.a-details{
+    text-decoration: none;
+    color: inherit;
+}
+
+.a-details:hover{
+    text-decoration: underline;
+}
+
+img{
+    display: block;
+    block-size: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}
+
+p{
+    text-align: center;
+    font-size: larger;
+}
+
+h4{
+    text-align: center;
+}
+
+p .back{
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+p .back:hover{
+    text-decoration: underline;
+}
