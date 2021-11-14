@@ -75,11 +75,8 @@ function App() {
   
   // Remove from Wishlist
   function remove(data){
-    const index = wishList.indexOf(data);
-    if (index > -1){
-      wishList.splice(index, 1);
-      navigateTo('search');
-    }
+    wishList.splice(data, 1);
+    navigateTo('search');
   }
 
   // Search Movies
@@ -122,7 +119,7 @@ function App() {
             <td id={"Description-" + match}>{database[match].description}</td>
             <td><a className="ref" onClick={() => navigateTo('details')}>Details</a></td>
             <td><a className="ref" onClick={() => add(database[match])}>Add to Wishlist</a></td>
-            <td><a className="ref" onClick={() => remove(database[match])}>Remove from Wishlist</a></td>
+            <td><a className="ref" onClick={() => remove(match)}>Remove from Wishlist</a></td>
           </tr>
         )}
       </table>
@@ -215,8 +212,13 @@ function App() {
   
     render() {
       return (
-        <div className="wrapper">
-          <Result content = {this.state.content}/>
+        <div>
+          <div className="search-box">
+            <h3 style={{'text-align': 'center' }}>Your Wishlist</h3>
+          </div>
+          <div className="wrapper">
+            <Result content = {this.state.content}/>
+          </div>
         </div>
       )
     }
@@ -281,9 +283,6 @@ function App() {
               <li className="menu"><a onClick={() => navigateTo ('wishlist')}>Wishlist ({wishList.length})</a></li>
           </ul>
       </div>
-      <br />
-      <br />
-      <h3>Your Wishlist</h3>
       <ContainerWishlist />
       <br />
       <br />
