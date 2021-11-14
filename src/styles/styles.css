@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&display=swap');
 
 *{
-    font-family: "Poppins", sans-serif;
+    font-family: Poppins, sans-serif;
 }
 
 body{
@@ -31,6 +31,7 @@ li{
 
 .menu{
     float:right;
+    cursor: pointer;
 }
 
 li a{
@@ -47,6 +48,7 @@ li a:hover:not(.active){
 
 .active{
     background-color: darkolivegreen;
+    cursor: pointer;
 }
 
 .navigation-wrapper{
@@ -109,7 +111,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    margin-top: 250px;
+    margin-top: 300px;
   }
   
 td, th {

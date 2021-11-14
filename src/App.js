@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 import './styles/styles.css';
+import Typewriter from "typewriter-effect";
+
+
 
 function App() {
-  //functionable constants
+  // functionable constants
   const [page, setPage] = useState('dashboard');
   const navigateTo = (nextPage) => {
     setPage(nextPage);
   };
 
-  //movie list
+  // Movie Database Constant
   const movies = [
     {
         name: "Free Guy", 
@@ -62,19 +65,176 @@ function App() {
       rating: "9.0/10"
     }
   ]
+  
+  // Wishlist Constant
+  const wishList = [];
 
+  // Add to Wishlist
+  function add(data){
+    wishList.push(data);
+  }
+  
+  // Search Movies
+  function listing(database, query){
+    function getTitle(data, mvname){
+      var temp = new RegExp(mvname, "i")
+      let matched = []
+      for(let i = 0 ; i < 10; i++){
+        var result = data[i].name.match(temp);
+        if(result != null){
+          matched.push(i);
+        }
+      }
+      return matched;
+    }
+    let matches =[]
+    if (query == "all") {
+      for (let i = 0; i < database.length; i++){
+        matches.push(i)
+      }
+    }
+    else {
+      matches = getTitle(database, query)
+    }
+
+    const table = (
+    <table>
+      <tr>
+        <td>Movie Name</td>
+        <td>Rating</td>
+        <td>Description</td>
+        <td>Details</td>
+        <td>Actions</td>
+      </tr>
+      
+      {matches.map((match) =>
+        <tr>
+          <td id={"Name-" + match}>{database[match].name}</td>
+          <td id={"Rating-" + match}>{database[match].rating}</td>
+          <td id={"Description-" + match}>{database[match].description}</td>
+          <td><a onClick={() => navigateTo('details')}>Details</a></td>
+          <td><a onClick={() => add(database[match])}>Add to Wishlist</a></td>
+        </tr>
+      )}
+      </table>
+    )
+    return table
+  }
+  
+  class SearchForm extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        value: ''};
+  
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+  
+    handleChange(event){
+      this.setState(
+        {value: event.target.value}
+      );
+    }
+  
+    handleSubmit(event){
+      event.preventDefault();
+      const result = listing(this.state.value);
+      this.props.containerContent(result);
+    }
+  
+    render() {
+      return(
+      <div className="search-box" action="">
+            <h2 style={{'text-align': 'center' }}> Search a Movie</h2>
+            <form onSubmit={this.handleSubmit}>
+                <input type="text" id="movieName" autocomplete="off" placeholder="Enter a Movie Name" onChange={this.handleChange} value={this.state.value}/>
+                <button type="submit" id="searchb" value="submit">Search</button>
+            </form>
+      </div>
+      );
+    }
+  }
+  
+  class Result extends React.Component{
+    render() {
+      return(
+        this.props.content
+      );
+    }
+  }
+  
+  class Container extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        value: '',
+        content: listing(movies, "all") 
+      };
+    }
+  
+    changeHandler = (result) => {
+      this.setState({
+        content: result
+      })
+    }
+  
+    render() {
+      return (
+        <div className="wrapper">
+          <SearchForm containerContent = {this.changeHandler} />
+          <Result content = {this.state.content}/>
+        </div>
+      )
+    }
+  }
+
+  class ContainerWishlist extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        value: '',
+        content: listing(wishList, "all") 
+      };
+    }
+  
+    changeHandler = (result) => {
+      this.setState({
+        content: result
+      })
+    }
+  
+    render() {
+      return (
+        <div className="wrapper">
+          <SearchForm containerContent = {this.changeHandler} />
+          <Result content = {this.state.content}/>
+        </div>
+      )
+    }
+  }
+  
   //Dashboard
   const renderDashboard = () => (
-    typewritter(),
     <>
       <div className="navigation-wrapper">
             <ul className="nav-ul">
                 <li className="active"><a onClick={() => navigateTo('dashboard')}>Welcome User</a></li>
                 <li className="menu"><a onClick={() => navigateTo('search')}>Search a Movie</a></li>
+                <li className="menu"><a onClick={() => navigateTo ('wishlist')}>Wishlist ({wishList.length})</a></li>
             </ul>
         </div>
         <br />
-        <h1>Welcome to Movie Database</h1>
+        <div className = "App">
+          <Typewriter
+            options = {{
+              strings: ["Welcome to Movie Database", "Made by: Nicholas Sidharta", "GDSC ITB Front-end Framework", "Enjoy!"],
+              delay: 100,
+              autoStart: true,
+              loop: true,
+            }}
+          />
+        </div>
       <br />
       <footer>
         Copyright &copy; Movie Database - GDSC ITB 2021 - Nicholas Sidharta - 597
@@ -84,25 +244,18 @@ function App() {
 
   //Search Movie
   const renderSearch = () => (
-    listing(),
     <>
       <div className="navigation-wrapper">
           <ul className="nav-ul">
               <li className="active"><a onClick={() => navigateTo('dashboard')}>Welcome User</a></li>
               <li className="menu"><a onClick={() => navigateTo('search')}>Search a Movie</a></li>
+              <li className="menu"><a onClick={() => navigateTo ('wishlist')}>Wishlist ({wishList.length})</a></li>
           </ul>
       </div>
       <br />
       <br />
-      <div className="search-box">
-          <h2 style={{'text-align': 'center' }}> Search a Movie</h2>
-          <form>
-              <input type="text" id="movieName" autocomplete="off" placeholder="Enter a Movie Name" />
-              <button type="button" id="searchb">Search</button>
-              <button type="reset">Reset</button>
-          </form>
-      </div>
-      <div className="container" id="containers"></div>
+      <Container />
+      <br />
       <br />
       <footer>
           Copyright &copy; Movie Database - GDSC ITB 2021 - Nicholas Sidharta - 597
@@ -113,120 +266,52 @@ function App() {
   //Wishlist
   const renderWishlist = () => (
     <>
-      
+      <div className="navigation-wrapper">
+          <ul className="nav-ul">
+              <li className="active"><a onClick={() => navigateTo('dashboard')}>Welcome User</a></li>
+              <li className="menu"><a onClick={() => navigateTo('search')}>Search a Movie</a></li>
+              <li className="menu"><a onClick={() => navigateTo ('wishlist')}>Wishlist ({wishList.length})</a></li>
+          </ul>
+      </div>
+      <br />
+      <br />
+      <ContainerWishlist />
+      <br />
+      <br />
+      <footer>
+          Copyright &copy; Movie Database - GDSC ITB 2021 - Nicholas Sidharta - 597
+      </footer>
     </>
   );
 
-  function typewritter(){
-    //typewritter effect
-    document.addEventListener('DOMContentLoaded',function(event){
-      // array with texts to type in typewriter
-      var dataText = [ "Welcome to Movie Database", "Created by: Nicholas Sidharta", "GDSC ITB Workshop Front-End", "Enjoy!"];
-
-      // type one text in the typwriter
-      // keeps calling itself until the text is finished
-      function typeWriter(text, i, fnCallback) {
-        // check if text isn't finished yet
-        if (i < (text.length)) {
-          // add next character to h1
-        document.querySelector("h1").innerHTML = text.substring(0, i+1) +'<span class="type-span" aria-hidden="true"></span>';
-
-          // wait for a while and call this function again for next character
-          setTimeout(function() {
-            typeWriter(text, i + 1, fnCallback)
-          }, 100);
-        }
-        // text finished, call callback if there is a callback function
-        else if (typeof fnCallback == 'function') {
-          // call callback after timeout
-          setTimeout(fnCallback, 1000);
-        }
-      }
-      // start a typewriter animation for a text in the dataText array
-      function StartTextAnimation(i) {
-        if (typeof dataText[i] == 'undefined'){
-            setTimeout(function() {
-              StartTextAnimation(0);
-            }, 1000);
-        }
-        // check if dataText[i] exists
-        else if (i < dataText[i].length) {
-          // text exists! start typewriter animation
-          typeWriter(dataText[i], 0, function(){
-          // after callback (and whole text has been animated), start next text
-          StartTextAnimation(i + 1);
-        });
-        }
-      }
-      // start the text animation
-      StartTextAnimation(0);
-      }
+  const renderDetails = () => (
+    <>
+      <div>
+        <div className="navigation-wrapper">
+            <ul className="nav-ul">
+              <li className="active"><a onClick={() => navigateTo('dashboard')}>Welcome User</a></li>
+              <li className="menu"><a onClick={() => navigateTo('search')}>Search a Movie</a></li>
+              <li className="menu"><a onClick={() => navigateTo ('wishlist')}>Wishlist ({wishList.length})</a></li>
+            </ul>
+        </div>
+        <br />
+        <Container />
+      </div>
+      <br />
+      <br />
+      <footer>
+          Copyright &copy; Movie Database - GDSC ITB 2021 - Nicholas Sidharta - 597
+      </footer>
+    </>
     );
-  }
-  
-  function listing(){
-    var table = "<table>"+
-      "<tr>"+
-          "<th>Name</th>"+
-          "<th>Rating</th>"+
-          "<th>Description</th>"+
-          "<th>Details</th>"+
-      "</tr>";
-
-    for(let i = 0 ; i < 10; i++){
-      table = table + "<tr>"+
-          "<td id='Name"+i+"'>"+movies[i].name+"</td>"+
-          "<td id='Rating"+i+"'>"+movies[i].rating+"</td>"+
-          "<td id='Description"+i+"'>"+movies[i].description+"</td>"+
-          "<td><a href='details.html?id=" + i + "'class='a-details'>details</a></td>"+
-      "</tr>";
-    }
-    table = table + "</table>";
-
-    document.getElementById("containers").innerHTML = table;
-
-    function getTitle(mvname){
-      var temp = new RegExp(mvname, "i")
-      let matched = []
-      for(let i = 0 ; i < 10; i++){
-        var result = movies[i].name.match(temp);
-        if(result != null){
-          matched.push(i);
-        }
-      }
-      return matched;
-    }
-
-    document.getElementById("searchb").addEventListener("click", function(){
-      let match = getTitle(document.getElementById("movieName").value)
-      var table = "<table>"+
-        "<tr>"+
-            "<th>Name</th>"+
-            "<th>Rating</th>"+
-            "<th>Description</th>"+
-            "<th>Details</th>"+
-        "</tr>";
-
-      for(let i = 0 ; i < match.length; i++){
-        table = table + "<tr>"+
-            "<td id='Name"+match[i]+"'>"+movies[match[i]].name+"</td>"+
-            "<td id='Rating"+match[i]+"'>"+movies[match[i]].rating+"</td>"+
-            "<td id='Description"+match[i]+"'>"+movies[match[i]].description+"</td>"+
-            "<td><a href='details.html?id=" + match[i] + "'class='a-details'>details</a></td>"+
-        "</tr>";
-      }
-    table = table + "</table>";
-
-    document.getElementById("containers").innerHTML = table;
-    });
-  }
 
   //recall page
   return (
     <div className = "main">
       {page === 'dashboard' && renderDashboard()}
       {page === 'search' && renderSearch()}
-      {page === 'wishlist' && renderWishlist()}  
+      {page === 'wishlist' && renderWishlist()}
+      {page === 'details' && renderDetails()}  
     </div>
   );
 }
