@@ -164,3 +164,16 @@ p .back{
 p .back:hover{
     text-decoration: underline;
 }
+
+h3{
+    text-align: center;
+}
+
+.ref{
+    cursor: pointer;
+}
+
+.ref:hover{
+    color: aqua;
+    transition: 0.5s ease;
+}

@@ -3,7 +3,8 @@ import './App.css';
 import './styles/styles.css';
 import Typewriter from "typewriter-effect";
 
-
+// Wishlist Constant
+const wishList = [];
 
 function App() {
   // functionable constants
@@ -65,21 +66,28 @@ function App() {
       rating: "9.0/10"
     }
   ]
-  
-  // Wishlist Constant
-  const wishList = [];
 
   // Add to Wishlist
   function add(data){
     wishList.push(data);
+    navigateTo('wishlist');
   }
   
+  // Remove from Wishlist
+  function remove(data){
+    const index = wishList.indexOf(data);
+    if (index > -1){
+      wishList.splice(index, 1);
+      navigateTo('search');
+    }
+  }
+
   // Search Movies
   function listing(database, query){
     function getTitle(data, mvname){
       var temp = new RegExp(mvname, "i")
       let matched = []
-      for(let i = 0 ; i < 10; i++){
+      for(let i = 0 ; i < data.length; i++){
         var result = data[i].name.match(temp);
         if(result != null){
           matched.push(i);
@@ -104,18 +112,19 @@ function App() {
         <td>Rating</td>
         <td>Description</td>
         <td>Details</td>
-        <td>Actions</td>
+        <td>Add</td>
+        <td>Remove</td>
       </tr>
-      
-      {matches.map((match) =>
-        <tr>
-          <td id={"Name-" + match}>{database[match].name}</td>
-          <td id={"Rating-" + match}>{database[match].rating}</td>
-          <td id={"Description-" + match}>{database[match].description}</td>
-          <td><a onClick={() => navigateTo('details')}>Details</a></td>
-          <td><a onClick={() => add(database[match])}>Add to Wishlist</a></td>
-        </tr>
-      )}
+        {matches.map((match) =>
+          <tr>
+            <td id={"Name-" + match}>{database[match].name}</td>
+            <td id={"Rating-" + match}>{database[match].rating}</td>
+            <td id={"Description-" + match}>{database[match].description}</td>
+            <td><a className="ref" onClick={() => navigateTo('details')}>Details</a></td>
+            <td><a className="ref" onClick={() => add(database[match])}>Add to Wishlist</a></td>
+            <td><a className="ref" onClick={() => remove(database[match])}>Remove from Wishlist</a></td>
+          </tr>
+        )}
       </table>
     )
     return table
@@ -207,7 +216,6 @@ function App() {
     render() {
       return (
         <div className="wrapper">
-          <SearchForm containerContent = {this.changeHandler} />
           <Result content = {this.state.content}/>
         </div>
       )
@@ -275,6 +283,7 @@ function App() {
       </div>
       <br />
       <br />
+      <h3>Your Wishlist</h3>
       <ContainerWishlist />
       <br />
       <br />
